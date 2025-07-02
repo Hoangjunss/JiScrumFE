@@ -12,11 +12,19 @@ export interface ProjectDTO {
     endDate: string;
 }
 
+export interface CreateProjectDTO {
+    name: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+    status?: string;
+}
+
 interface ProjectListResponse {
     projectDTOs: ProjectDTO[];
 }
 
-const API_BASE = 'http://localhost:8080/api';
+const API_BASE = '/api';
 
 // Fetch danh sách projects
 export const fetchProjectList = async (): Promise<ProjectListResponse> => {
@@ -34,8 +42,7 @@ export const fetchProjectList = async (): Promise<ProjectListResponse> => {
     }
 };
 
-// Fetch một project cụ thể
-export const fetchProjectItem = async (itemId: number | string): Promise<ProjectDTO> => {
+    export const fetchProjectItem = async (itemId: number | string): Promise<ProjectDTO> => {
     try {
         const response = await apiClient.get<ProjectDTO>(`${API_BASE}/project/${itemId}`);
         
@@ -46,6 +53,25 @@ export const fetchProjectItem = async (itemId: number | string): Promise<Project
         }
     } catch (error) {
         logger.error(`Lỗi khi lấy project #${itemId}:`, error);
+        throw error;
+    }
+};
+
+    export const createProject = async (projectData: CreateProjectDTO): Promise<ProjectDTO> => {
+    try {
+        const response = await apiClient.post<ProjectDTO>(`${API_BASE}/project`, {
+            ...projectData,
+            status: projectData.status || 'DRAFT'
+        });
+        
+        if (response && response.data) {
+            logger.info('Tạo project thành công:', response.data);
+            return response.data;
+        } else {
+            throw new Error('Không thể tạo project mới');
+        }
+    } catch (error) {
+        logger.error('Lỗi khi tạo project:', error);
         throw error;
     }
 };

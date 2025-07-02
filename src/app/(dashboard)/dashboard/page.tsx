@@ -1,8 +1,8 @@
-import { ProjectListCard } from "@/features/dashboard/project-list-card";
+import { ProjectList } from "@/features/dashboard/project-list-card";
 
 const ProjectListPage = () => {
 return (
- <ProjectListCard/>
+ <ProjectList/>
 );
 };
 export default ProjectListPage;
