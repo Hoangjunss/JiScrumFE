@@ -3,6 +3,7 @@ import { TestCompoment } from "@/features/test"
 
 export default function Home() {
  return (
- <TestCompoment />
+
+ <Button/>
  )
 }

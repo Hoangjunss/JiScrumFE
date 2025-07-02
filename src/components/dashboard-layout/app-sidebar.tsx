@@ -1,4 +1,5 @@
 'use client';
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -28,7 +29,7 @@ import {
   SidebarMenuSubItem,
   SidebarRail
 } from '@/components/ui/sidebar';
-import { navItems } from '@/constants/data';
+import { navItems, projectNavItems } from '@/constants/data';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import {
   IconBell,
@@ -55,6 +56,10 @@ export default function AppSidebar() {
   const { isOpen } = useMediaQuery();
   const router = useRouter();
 
+  const currentNavItems = pathname.startsWith('/project')
+    ? projectNavItems
+    : navItems;
+
   const handleSwitchTenant = (_tenantId: string) => {
     // Tenant switching functionality would be implemented here
   };
@@ -62,7 +67,7 @@ export default function AppSidebar() {
   const activeTenant = tenants[0];
 
   return (
-    <Sidebar collapsible='icon'>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
         <OrgSwitcher
           tenants={tenants}
@@ -71,18 +76,18 @@ export default function AppSidebar() {
         />
       </SidebarHeader>
 
-      <SidebarContent className='overflow-x-hidden'>
+      <SidebarContent className="overflow-x-hidden">
         <SidebarGroup>
           <SidebarGroupLabel>Overview</SidebarGroupLabel>
           <SidebarMenu>
-            {navItems.map((item) => {
+            {currentNavItems.map((item) => {
               const Icon = item.icon ? Icons[item.icon] : Icons.logo;
               return item.items && item.items.length > 0 ? (
                 <Collapsible
                   key={item.title}
                   asChild
                   defaultOpen={item.isActive}
-                  className='group/collapsible'
+                  className="group/collapsible"
                 >
                   <SidebarMenuItem>
                     <CollapsibleTrigger asChild>
@@ -92,7 +97,7 @@ export default function AppSidebar() {
                       >
                         {item.icon && <Icon />}
                         <span>{item.title}</span>
-                        <IconChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
+                        <IconChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
@@ -137,19 +142,18 @@ export default function AppSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size='lg'>
-                  {/* Tạm thời không hiển thị avatar */}
-                  <span className='text-sm font-medium'>Account</span>
-                  <IconChevronsDown className='ml-auto size-4' />
+                <SidebarMenuButton size="lg">
+                  <span className="text-sm font-medium">Account</span>
+                  <IconChevronsDown className="ml-auto size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className='min-w-56 rounded-lg'
-                side='bottom'
-                align='end'
+                className="min-w-56 rounded-lg"
+                side="bottom"
+                align="end"
                 sideOffset={4}
               >
-                <DropdownMenuLabel className='p-2 text-sm'>
+                <DropdownMenuLabel className="p-2 text-sm">
                   Hello, Guest
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -157,21 +161,21 @@ export default function AppSidebar() {
                   <DropdownMenuItem
                     onClick={() => router.push('/dashboard/profile')}
                   >
-                    <IconUserCircle className='mr-2 h-4 w-4' />
+                    <IconUserCircle className="mr-2 h-4 w-4" />
                     Profile
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <IconCreditCard className='mr-2 h-4 w-4' />
+                    <IconCreditCard className="mr-2 h-4 w-4" />
                     Billing
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <IconBell className='mr-2 h-4 w-4' />
+                    <IconBell className="mr-2 h-4 w-4" />
                     Notifications
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => router.push('/auth/sign-in')}>
-                  <IconLogout className='mr-2 h-4 w-4' />
+                  <IconLogout className="mr-2 h-4 w-4" />
                   Sign In
                 </DropdownMenuItem>
               </DropdownMenuContent>
