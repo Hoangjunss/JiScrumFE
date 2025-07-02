@@ -1,6 +1,8 @@
-// app/(dashboard)/dashboard/page.tsx
-'use client';
+import { ProjectListCard } from "@/features/dashboard/project-list-card";
 
-export default function DashboardPage() {
-  return <div>Welcome to your dashboard!</div>;
-}
+const ProjectListPage = () => {
+return (
+ <ProjectListCard/>
+);
+};
+export default ProjectListPage;
