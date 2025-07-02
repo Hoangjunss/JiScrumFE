@@ -2,6 +2,7 @@
 import { useTheme } from 'next-themes';
 import React from 'react';
 import { ActiveThemeProvider } from '@/components/active-theme';
+import { LoadingProvider } from '@/hooks/use-loading';
 
 export default function Providers({
   activeThemeValue,
@@ -15,7 +16,10 @@ export default function Providers({
 
   return (
     <ActiveThemeProvider initialTheme={activeThemeValue}>
-      {children}
+      <LoadingProvider>
+        {children}
+      </LoadingProvider>
+      
     </ActiveThemeProvider>
   );
 }
