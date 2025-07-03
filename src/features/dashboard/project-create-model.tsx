@@ -41,13 +41,13 @@ const initialFormData: FormData = {
   description: '',
   startDate: '',
   endDate: '',
-  status: 'DRAFT'
+  status: 'PLANNING'
 };
 
 const PROJECT_STATUS_OPTIONS = [
-  { value: 'DRAFT', label: 'DRAFT' },
+  { value: 'PLANNING', label: 'PLANNING' },
   { value: 'ACTIVE', label: 'ACTIVE' },
-  { value: 'PAUSED', label: 'PAUSED' },
+  { value: 'ON_HOLD', label: 'ON_HOLD' },
   { value: 'COMPLETED', label: 'COMPLETED' },
   { value: 'CANCELED', label: 'CANCELED' }
 ];

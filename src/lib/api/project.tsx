@@ -20,6 +20,12 @@ export interface CreateProjectDTO {
     status?: string;
 }
 
+export interface ProjectFilterRequest {
+  name?: string;
+  status?: 'NEW' | 'IN_PROGRESS' | 'DONE' | 'CANCELLED';
+  owner?: boolean;          // hoặc ownerId?: number;
+}
+
 interface ProjectListResponse {
     projectDTOs: ProjectDTO[];
 }
@@ -29,9 +35,10 @@ const API_BASE = '/api';
 // Fetch danh sách projects
 export const fetchProjectList = async (): Promise<ProjectListResponse> => {
     try {
-        const response = await apiClient.get<ProjectListResponse>(`${API_BASE}/project`);
+        const response = await apiClient.get<ProjectListResponse>(`${API_BASE}/project/filter`);
         
         if (response && response.data && response.data.projectDTOs) {
+            console.log('Danh sách project:', response);
             return response.data;
         } else {
             throw new Error('Dữ liệu project bị thiếu trong phản hồi');
