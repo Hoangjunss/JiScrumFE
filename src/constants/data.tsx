@@ -9,6 +9,13 @@ export type Member = {
   category: string;
   updated_at: string;
 };
+export type APIResponse<T>= {
+  success: boolean;
+  message: string;
+  data: T;
+  errors: string[];
+  path: string;
+};
 
 
 export const navItems: NavItem[] = [
@@ -90,3 +97,4 @@ export const projectNavItems: NavItem[] = [
     items: [] // No child items
   }
 ];
+

@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { login } from '@/lib/api/auth';
 
 interface Login2Props {
   heading?: string;
@@ -58,10 +59,21 @@ export const SignInCard = ({
       password: "",
     },
   });
-const onSubmit = (values: z.infer<typeof formSchema>) => {
-    alert(JSON.stringify(values, null, 2));
-    // TODO: Gọi API tạo tài khoản ở đây
-  };
+const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  try {
+    const res = await login(values); // gọi API
+
+    if (res.success && res.data?.accessToken) {
+      localStorage.setItem('authToken', res.data.accessToken);
+      // Có thể gọi thêm API lấy user hoặc redirect ở đây
+      console.log('✅ Login thành công:', res.data);
+    } else {
+      console.warn('❌ Đăng nhập thất bại:', res.message);
+    }
+  } catch (error) {
+    console.error('⚠️ Lỗi hệ thống:', error);
+  }
+};
 
 
   return (

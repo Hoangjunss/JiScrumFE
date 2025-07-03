@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signup } from '@/lib/api/auth';
 
 interface Login2Props {
   heading?: string;
@@ -30,10 +31,12 @@ interface Login2Props {
 }
 
 // Validate
+const usernameSchema = z.string().trim().email("Invalid email");
 const emailSchema = z.string().trim().email("Invalid email");
 const passwordSchema = z.string().min(8, "Minimum of 8 characters required");
 
 const formSchema = z.object({
+  name:usernameSchema,
   email: emailSchema,
   password: passwordSchema,
 });
@@ -54,14 +57,26 @@ export const SignupCard = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    alert(JSON.stringify(values, null, 2));
-    // TODO: Gọi API tạo tài khoản ở đây
+    try {
+    const res = await signup(values as AccountCreateDTO);
+    if (res.success) {
+      alert('🎉 Tạo tài khoản thành công!');
+      console.log('✅ Created Account:', res.data);
+      // Optionally redirect or reset form
+    } else {
+      alert('❌ Đăng ký thất bại: ' + res.message);
+    }
+  } catch (err: any) {
+    console.error('❌ Lỗi khi đăng ký:', err);
+    alert('Đã có lỗi xảy ra khi đăng ký.');
+  }
   };
 
   return (
@@ -88,6 +103,24 @@ export const SignupCard = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className="border-muted bg-background flex w-full flex-col gap-6 rounded-md border px-6 py-12 shadow-md"
             >
+               <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>name</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="name"
+                        placeholder="Enter your name"
+                        className="bg-background"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"
