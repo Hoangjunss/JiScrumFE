@@ -19,7 +19,7 @@ interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
 const STATUS_COLOR_MAP: Record<string, string> = {
   DRAFT: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300",
   ACTIVE: "bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300",
-  PAUSED: "bg-yellow-100 text-yellow-600 dark:bg-yellow-800 dark:text-yellow-300",
+  ON_HOLD: "bg-yellow-100 text-yellow-600 dark:bg-yellow-800 dark:text-yellow-300",
   COMPLETED: "bg-blue-100 text-blue-600 dark:bg-blue-800 dark:text-blue-300",
   CANCELED: "bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300",
 };

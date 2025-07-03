@@ -17,6 +17,14 @@ export type APIResponse<T>= {
   path: string;
 };
 
+export type Page<T> = {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+}
+
 
 export const navItems: NavItem[] = [
   {

@@ -1,3 +1,4 @@
+import { APIResponse, Page } from '@/constants/data';
 import apiClient from '../api-client';
 import logger from '../logger';
 
@@ -21,37 +22,39 @@ export interface CreateProjectDTO {
 }
 
 export interface ProjectFilterRequest {
-  name?: string;
-  status?: 'NEW' | 'IN_PROGRESS' | 'DONE' | 'CANCELLED';
-  owner?: boolean;          // hoặc ownerId?: number;
+  name?: string | null;
+  status?: null | 'PLANNING' | 'ACTIVE' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED';
+  owner?: boolean | null;   
 }
 
-interface ProjectListResponse {
+export interface ProjectListResponse {
     projectDTOs: ProjectDTO[];
 }
 
-const API_BASE = '/api';
-
-// Fetch danh sách projects
-export const fetchProjectList = async (): Promise<ProjectListResponse> => {
-    try {
-        const response = await apiClient.get<ProjectListResponse>(`${API_BASE}/project/filter`);
-        
-        if (response && response.data && response.data.projectDTOs) {
-            console.log('Danh sách project:', response);
-            return response.data;
-        } else {
-            throw new Error('Dữ liệu project bị thiếu trong phản hồi');
+        export const fetchProjectList = async (
+        filter: ProjectFilterRequest,
+        page = 0,
+        size = 10
+        ): Promise<Page<ProjectDTO>> => {
+        try {
+            const response = await apiClient.get<APIResponse<Page<ProjectDTO>>>(
+            `/projects/filter`,
+            { params: { ...filter, page, size } } 
+            );
+            if (response) {
+            console.log('Danh sách project:', response.data);
+            return response.data.data;
+            }
+            throw new Error('Thiếu dữ liệu project trong phản hồi');
+        } catch (error) {
+            logger.error('Lỗi khi lấy danh sách project:', error);
+            throw error;
         }
-    } catch (error) {
-        logger.error('Lỗi khi lấy danh sách project:', error);
-        throw error;
-    }
 };
 
     export const fetchProjectItem = async (itemId: number | string): Promise<ProjectDTO> => {
     try {
-        const response = await apiClient.get<ProjectDTO>(`${API_BASE}/project/${itemId}`);
+        const response = await apiClient.get<ProjectDTO>(`/project/${itemId}`);
         
         if (response && response.data) {
             return response.data;
@@ -66,7 +69,7 @@ export const fetchProjectList = async (): Promise<ProjectListResponse> => {
 
     export const createProject = async (projectData: CreateProjectDTO): Promise<ProjectDTO> => {
     try {
-        const response = await apiClient.post<ProjectDTO>(`${API_BASE}/project`, {
+        const response = await apiClient.post<ProjectDTO>(`/project`, {
             ...projectData,
             status: projectData.status || 'DRAFT'
         });

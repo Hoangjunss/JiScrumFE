@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import PageContainer from '@/components/layout/page-container';
 import ProjectCard from './project-card';
-import { fetchProjectList, ProjectDTO } from '@/lib/api/project';
+import { fetchProjectList, ProjectDTO, ProjectFilterRequest } from '@/lib/api/project';
 import { Loader2, AlertCircle, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import CreateProjectModal from './project-create-model';
@@ -21,7 +21,14 @@ export const ProjectList = () => {
     loading: true,
     error: null
   });
-  
+
+  const projectFilterRequest: ProjectFilterRequest = {
+    name: null,
+    owner: true,
+    status: null
+  }
+
+
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const loadProjects = async () => {
@@ -29,10 +36,10 @@ export const ProjectList = () => {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
       
-      const response = await fetchProjectList();
+      const response = await fetchProjectList(projectFilterRequest);
       
       setState({
-        projects: response.projectDTOs || [],
+        projects: response.content || [],
         loading: false,
         error: null
       });
