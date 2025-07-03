@@ -1,7 +1,7 @@
 import { APIResponse } from "@/constants/data";
 import apiClient from "../api-client";
 export type FormLogin = {
-  email?: string;
+  username?: string;
   password?: string; // hoặc string tùy backend bạn
 };
 export type Token = {
@@ -25,7 +25,7 @@ export interface AccountDTO {
 
 export async function login(filter: FormLogin): Promise<APIResponse<Token>> {
   try {
-    const response = await apiClient.post<APIResponse<Token>>('/sign-in', filter);
+    const response = await apiClient.post<APIResponse<Token>>('/accounts/sign-in', filter);
     return response.data;
   } catch (error) {
     console.error('❌ Error during login:', error);
@@ -34,7 +34,7 @@ export async function login(filter: FormLogin): Promise<APIResponse<Token>> {
 }
 export async function signup(payload: AccountCreateDTO): Promise<APIResponse<AccountDTO>> {
   try {
-    const response = await apiClient.post<APIResponse<AccountDTO>>('/api/accounts', payload);
+    const response = await apiClient.post<APIResponse<AccountDTO>>('/accounts', payload);
     return response.data;
   } catch (error) {
     console.error('❌ Error during sign up:', error);

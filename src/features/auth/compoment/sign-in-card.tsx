@@ -30,13 +30,16 @@ interface Login2Props {
 }
 
 
-const emailSchema = z.string().trim().email("Invalid email");
+const emailSchema = z
+  .string()
+  .trim()
+  .min(1, { message: "Invalid username" });
 const passwordSchema = z.string().min(8, "Minimum of 8 characters required");
 
 // 👇 Tổ hợp schema form
 const formSchema = z.object({
   
-  email: emailSchema,
+  username: emailSchema,
   password: passwordSchema,
 });
 export const SignInCard = ({
@@ -55,7 +58,7 @@ export const SignInCard = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -102,7 +105,7 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
             >
               <FormField
                 control={form.control}
-                name="email"
+                name="username"
                 rules={{ required: "Email is required" }}
                 render={({ field }) => (
                   <FormItem>
@@ -110,7 +113,7 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
                     <FormControl>
                       <Input
                         {...field}
-                        type="email"
+                        type="username"
                         placeholder="Enter your email"
                         className="bg-background"
                       />

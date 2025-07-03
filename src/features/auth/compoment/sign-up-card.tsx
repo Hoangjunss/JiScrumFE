@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signup } from '@/lib/api/auth';
+import { AccountCreateDTO, signup } from '@/lib/api/auth';
 
 interface Login2Props {
   heading?: string;
@@ -31,12 +31,16 @@ interface Login2Props {
 }
 
 // Validate
-const usernameSchema = z.string().trim().email("Invalid email");
+const usernameSchema = z
+  .string()
+  .trim()
+  .min(1, { message: "Invalid username" });
+
 const emailSchema = z.string().trim().email("Invalid email");
 const passwordSchema = z.string().min(8, "Minimum of 8 characters required");
 
 const formSchema = z.object({
-  name:usernameSchema,
+  username:usernameSchema,
   email: emailSchema,
   password: passwordSchema,
 });
@@ -57,14 +61,14 @@ export const SignupCard = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      username: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    try {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  try {
     const res = await signup(values as AccountCreateDTO);
     if (res.success) {
       alert('🎉 Tạo tài khoản thành công!');
@@ -77,7 +81,7 @@ export const SignupCard = ({
     console.error('❌ Lỗi khi đăng ký:', err);
     alert('Đã có lỗi xảy ra khi đăng ký.');
   }
-  };
+};
 
   return (
     <section className="bg-muted h-screen">
@@ -105,7 +109,7 @@ export const SignupCard = ({
             >
                <FormField
                 control={form.control}
-                name="name"
+                name="username"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>name</FormLabel>
